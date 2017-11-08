@@ -75,11 +75,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// func main() {
-// 	println("staritng app..")
-// 	http.HandleFunc("/", Handler)
-// 	http.ListenAndServe(":8084", nil)
-// }
+func main() {
+	println("staritng app..")
+	http.HandleFunc("/", Handler)
+	http.ListenAndServe(":8084", nil)
+}
 
 type ComposedResult struct {
 	TranformedData TranformedData `json:"tranformedData"`
