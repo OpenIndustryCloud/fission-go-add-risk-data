@@ -31,6 +31,7 @@ const (
 	DAMAGE_IMAGE_URL_2     = 114101729171
 	RECEIPT_OR_EST_IMG_URL = 114101729331
 	DAMAGE_VIDEO_URL       = 114101655952
+	SETTLEMENT_AMOUNT      = 114101736271
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +56,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			claimType = "TV"
 			ticketDetails.Ticket.TicketFormID = TV_FORM_ID
 		}
+		println("Submission ID ---> " + ticketDetails.Ticket.EventID)
 	} else {
 		createErrorResponse(w, "Ticket Details not recieved", http.StatusBadRequest)
 	}
@@ -87,6 +89,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	ticketDetails.addCustomFields(CustomFields{CLAIM_TYPE_FIELD_ID, claimType})
 	ticketDetails.addCustomFields(CustomFields{PHONE_FIELD_ID, ticketDetails.Ticket.Requester.Phone})
 	ticketDetails.addCustomFields(CustomFields{EMAIL_FIELD_ID, ticketDetails.Ticket.Requester.Email})
+	ticketDetails.addCustomFields(CustomFields{SETTLEMENT_AMOUNT, "0"})
 
 	//if images stored in Bucket
 	mediaBucket := composedResult.MediaBucket
@@ -130,6 +133,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	println("After updating Risk data, Image dats etc. to ticket -----> ", string(ticketDetailsJSON))
 	w.Header().Set("content-type", "application/json")
 	w.Write([]byte(string(ticketDetailsJSON)))
 
@@ -225,7 +229,7 @@ type TVClaimData struct {
 	TVSerialNo      string `json:"tv_serial_no,omitempty"`
 	DamageImageURL1 string `json:"damage_image_url_1,omitempty"`
 	DamageImageURL2 string `json:"damage_image_url_2,omitempty"`
-	TVReceiptImage  string `json:"tv_reciept_image_url"`
+	TVReceiptImage  string `json:"tv_reciept_image_url,omitempty"`
 	DamageVideoURL  string `json:"damage_video_url,omitempty"`
 }
 
