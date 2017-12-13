@@ -162,6 +162,8 @@ func main() {
 	http.ListenAndServe(":8084", nil)
 }
 
+// createErrorResponse - this function forms a error reposne with
+// error message and http code
 func createErrorResponse(w http.ResponseWriter, message string, status int) {
 	errorJSON, _ := json.Marshal(&Error{
 		Status:  status,
@@ -172,6 +174,7 @@ func createErrorResponse(w http.ResponseWriter, message string, status int) {
 	w.Write([]byte(errorJSON))
 }
 
+// Error - error object
 type Error struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
